@@ -65,11 +65,11 @@ const register = async (req, res, next) => {
         const uid = nanoid(50);
 
         const response = await addUser(uid, name, email);
-        console.log(response);
-        await User.create({ name, email, password, uid });
-        res.status(201).json({ message: "ACCOUNT CREATED SUCCESSFULLY", data: response });
-        return;
-        
+        if(response.status === 201) {
+            await User.create({ name, email, password, uid });
+            res.status(201).json({ message: "ACCOUNT CREATED SUCCESSFULLY", data: response });
+            return;
+        }
     } catch (err) {
         const error = handleError(err);
         console.log(error);
